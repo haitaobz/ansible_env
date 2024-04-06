@@ -1,0 +1,44 @@
+version: "3"
+
+networks:
+  net-ansible:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.0.2.0/24
+
+services:
+  master:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    container_name: example-ansible-master
+    hostname: ansible
+    volumes:
+      - ./etc/ansible:/etc/ansible
+      - ./ansible:/server/scripts/ansible
+    networks:
+      net-ansible:
+        ipv4_address: 192.0.2.49
+
+  node1:
+    image: example-ansible-node
+    hostname: host1
+    container_name: example-ansible-node1
+    networks:
+      net-ansible:
+        ipv4_address: 192.0.2.50
+  node2:
+    image: example-ansible-node
+    hostname: host2
+    container_name: example-ansible-node2
+    networks:
+      net-ansible:
+        ipv4_address: 192.0.2.51
+  node3:
+    image: example-ansible-node
+    hostname: host3
+    container_name: example-ansible-node3
+    networks:
+      net-ansible:
+        ipv4_address: 192.0.2.52
